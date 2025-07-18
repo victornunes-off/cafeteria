@@ -1,0 +1,31 @@
+{% extends 'usuarios/base.html' %}cls
+
+{% block aba %}Cadastrar Item{% endblock %}
+
+{% block titulo %}Cadastrar Novo Item do Cardápio{% endblock %}
+
+{% block conteudo %}
+<h3>Cadastro de Item</h3>
+<p class="lead">Preencha as informações do novo prato/item.</p>
+<hr>
+<form action="{% url 'lancar' %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-group mb-3">
+        <label for="titulo">Título:</label>
+        <input type="text" id="titulo" name="titulo" class="form-control">
+    </div>
+    <div class="form-group mb-3">
+        <label for="descricao">Descrição:</label>
+        <textarea id="descricao" name="descricao" class="form-control"></textarea>
+    </div>
+    <div class="form-group mb-3">
+        <label for="valor">Valor (R$):</label>
+        <input type="number" id="valor" name="valor" step="0.01" class="form-control">
+    </div>
+    <div class="form-group mb-3">
+        <label for="foto">Foto do item:</label>
+        <input type="file" id="foto" name="foto" class="form-control">
+    </div>
+    <button type="submit" class="btn btn-primary">Cadastrar Item</button>
+</form>
+{% endblock %}
