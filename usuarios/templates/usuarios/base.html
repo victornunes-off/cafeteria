@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block aba %}Cafe Maneiro{% endblock %}</title>
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet">
     <style>
         body {
             background-image: url("{% static 'img/fundo.jpg' %}");
@@ -35,7 +36,7 @@
                 }
             </style>
             <div class="container px-5">
-                <a class="navbar-brand text-white" href="{% url 'home' %}">Café Maneiro</a>
+                <a class="navbar-brand text-white" href="{% url 'home' %}" style="font-family: Caveat, sans serif;">Café Maneiro</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -79,7 +80,7 @@
                 <div class="col-md-4 mb-5">
                     <div class="card h-100" style="background-color: #d3d3d3;">
                         <div class="card-body" style="background-color: #ffffff;">
-                            <h2 class="card-title">Alterar Notas</h2>
+                            <h2 class="card-title">Alterar Item</h2>
                             <p class="card-text">Nesta opção você poderá alterar todas as notas já lançadas referente ás suas disciplinas</p>
                         </div>
                         <div class="card-footer"><a class="btn btn-primary btn-sm" href="{% url 'alterar' %}">Clique aqui</a></div>

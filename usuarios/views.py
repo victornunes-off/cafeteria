@@ -1,56 +1,55 @@
 from django.shortcuts import render
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate #verifica na base de dados ver se o usuario existe
-from django.contrib.auth import login as login_django, logout as logout_django #faz o login do usuario e logout do usuario
-from .models import Nota #importa o modelo Nota
-from django.urls import reverse #importa o reverse para redirecionar para a página de visualização
+from django.contrib.auth import authenticate, login as login_django, logout as logout_django
+from .models import ItemCardapio
+from django.urls import reverse
 
 def login(request):
     if request.method == 'GET':
-        return render(request, 'usuarios/login.html')#renderiza a página de login
+        return render(request, 'usuarios/login.html')
     else:
-        username = request.POST.get('email') #campo nome email do html
+        username = request.POST.get('email')
         senha = request.POST.get('senha')
 
-        user = authenticate(username = username, password = senha) #verifica se o usuario existe na base de dados
+        user = authenticate(username=username, password=senha)
         if user is not None:
-            login_django(request, user) #faz o login do usuario
-            return render(request, 'usuarios/home.html') #redireciona para a página home após o login
+            login_django(request, user)
+            return render(request, 'usuarios/home.html')
         else:
-            return HttpResponse('Login ou senha inválidos!') #retorna uma mensagem de erro
-        
+            return HttpResponse('Login ou senha inválidos!')
+
 def logout(request):
     if request.user.is_authenticated:
         logout_django(request)
         return render(request, 'usuarios/login.html')
     else:
         return HttpResponse('Você não acessou a sua conta ainda!')
-    
+
 def cadastro(request):
     if request.method == 'GET':
-        return render(request, 'usuarios/cadastro.html') #renderiza a página de cadastro
+        return render(request, 'usuarios/cadastro.html')
     else:
-        username = request.POST.get('email') #campo nome email do html
+        username = request.POST.get('email')
         email = request.POST.get('email')
         password = request.POST.get('senha')
         first_name = request.POST.get('nome')
 
-        user = User.objects.filter(username=username).first() #verifica se o usuario já existe na base de dados
+        user = User.objects.filter(username=username).first()
 
         if user is not None:
-            return HttpResponse('Usuario já existe!') #retorna uma mensagem de erro
+            return HttpResponse('Usuário já existe!')
         else:
-            user = User.objects.create_user(username=username, email=email, password=password, first_name=first_name) #cria o usuario na base de dados
-            user.save() #salva o usuario na base de dados
-            return render(request, 'usuarios/login.html') #redireciona para a página de login após o cadastro
+            user = User.objects.create_user(username=username, email=email, password=password, first_name=first_name)
+            user.save()
+            return render(request, 'usuarios/login.html')
 
 def home(request):
     if request.user.is_authenticated:
-        return render(request, 'usuarios/home.html') #renderiza a página home
+        return render(request, 'usuarios/home.html')
     else:
         return render(request, 'usuarios/login.html')
-    
+
 def lancar(request):
     if request.method == 'GET':
         if request.user.is_authenticated:
@@ -58,87 +57,66 @@ def lancar(request):
         else:
             return render(request, 'usuarios/login.html')
     else:
-        nota = Nota()
-        nota.nome_aluno = request.user.first_name  # Obtém o primeiro nome do usuário autenticado
-        nota.disciplina = request.POST.get('disciplina')#pegando o nome da disciplina do html
-        nota.nota_atividade = request.POST.get('nota_atividade')
-        nota.nota_trabalho = request.POST.get('nota_trabalho')
-        nota.nota_prova = request.POST.get('nota_prova')
-        nota.media = int(nota.nota_atividade) + int(nota.nota_trabalho) + int(nota.nota_prova)#convertendo as notas para inteiro pq html retorna string
-        nota_verificada = Nota.objects.filter(disciplina=nota.disciplina).first() #existe a disciplina no banco de dados
-
-        if nota_verificada:
-            return HttpResponse('Nota já lançada para essa disciplina!')
-        # Verifica se já existe uma nota lançada para a disciplina
-        else:
-            nota.save()  # Salva no banco
+        if request.user.is_authenticated:
+            item = ItemCardapio()
+            item.titulo = request.POST.get('titulo')
+            item.descricao = request.POST.get('descricao')
+            item.valor = request.POST.get('valor')
+            item.foto = request.FILES.get('foto')
+            item.save()
             return render(request, 'usuarios/home.html')
+        else:
+            return render(request, 'usuarios/login.html')
 
 def alterar(request):
     if request.method == 'GET':
         if request.user.is_authenticated:
-            lista_notas = Nota.objects.all()
-            dicionario_notas = {'lista_notas': lista_notas}
-            return render(request,'usuarios/alterar.html', dicionario_notas)
+            lista_itens = ItemCardapio.objects.all()
+            return render(request, 'usuarios/alterar.html', {'lista_itens': lista_itens})
         else:
             return render(request, 'usuarios/login.html')
-    
-def visualizar(request):
-    if request.method == 'GET':
-        if request.user.is_authenticated:
-            lista_notas = Nota.objects.all()
-            dicionario_notas = {'lista_notas': lista_notas}
-            return render(request,'usuarios/visualizar.html', dicionario_notas)
-        else:
-            return render(request, 'usuarios/login.html')
-    else:
-        disciplina = request.POST.get('disciplina')
-        if disciplina == "Todas as disciplinas":
-            lista_notas = Nota.objects.all()
-            dicionario_notas = {'lista_notas': lista_notas}
-            return render(request,'usuarios/visualizar.html', dicionario_notas)
-        else:
-            lista_notas = Nota.objects.filter(disciplina=disciplina)#se tem disciclina no banco
-            dicionario_notas_filtradas = {'lista_notas': lista_notas}
-            return render(request,'usuarios/visualizar.html', dicionario_notas_filtradas)
-        
-def excluir_verificacao(request, pk):
-    if request.method == 'GET':
-        if request.user.is_authenticated:
-            lista_notas = Nota.objects.get(pk=pk)  # Obtém a nota específica pelo chave primaria
-            dicionario_notas = {'lista_notas': lista_notas}
-            return render(request, 'usuarios/excluir.html', dicionario_notas)
-        else:
-            return HttpResponse('Faça o login para acessar!')
 
-def excluir(request, pk):
-    if request.method == 'GET':
-        if request.user.is_authenticated:
-            disciplina_selecionada = Nota.objects.get(pk=pk)  # Obtém a nota específica pelo chave primaria
-            disciplina_selecionada.delete() # Exclui a nota da base de dados
-            return HttpResponseRedirect(reverse('alterar'))  # Redireciona para a página de visualização
+def visualizar(request):
+    if request.user.is_authenticated:
+        lista_itens = ItemCardapio.objects.all()
+        return render(request, 'usuarios/visualizar.html', {'lista_itens': lista_itens})
+    else:
+        return render(request, 'usuarios/login.html')
+
+def excluir_verificacao(request, pk):
+    if request.user.is_authenticated:
+        item = ItemCardapio.objects.get(pk=pk)
+        return render(request, 'usuarios/excluir.html', {'item': item})
     else:
         return HttpResponse('Faça o login para acessar!')
 
+def excluir(request, pk):
+    if request.user.is_authenticated:
+        item = ItemCardapio.objects.get(pk=pk)
+        item.delete()
+        return HttpResponseRedirect(reverse('alterar'))
+    else:
+        return render(request, 'usuarios/login.html')
+
 def editar_verificacao(request, pk):
-    if request.method == 'GET':
-        if request.user.is_authenticated:
-            lista_notas = Nota.objects.get(pk=pk)  # Obtém a nota específica pelo chave primaria
-            dicionario_notas = {'lista_notas': lista_notas}
-            return render(request, 'usuarios/editar.html', dicionario_notas)
-        else:
-            return HttpResponse('Faça o login para acessar!')
-        
+    if request.user.is_authenticated:
+        item = ItemCardapio.objects.get(pk=pk)
+        return render(request, 'usuarios/editar.html', {'item': item})
+    else:
+        return HttpResponse('Faça o login para acessar!')
+
 def editar(request, pk):
     if request.method == 'POST':
         if request.user.is_authenticated:
-            nome_aluno = request.user.first_name
-            disciplina = request.POST.get('disciplina')
-            nota_atividade = request.POST.get('nota_atividade')
-            nota_trabalho = request.POST.get('nota_trabalho')
-            nota_prova = request.POST.get('nota_prova')
-            media = int(nota_atividade) + int(nota_trabalho) + int(nota_prova)
-            nota = Nota.objects.filter(pk=pk).update(nome_aluno=nome_aluno,disciplina=disciplina,nota_atividade=nota_atividade,nota_trabalho=nota_trabalho,nota_prova=nota_prova,media=media)
+            item = ItemCardapio.objects.get(pk=pk)
+            item.titulo = request.POST.get('titulo')
+            item.descricao = request.POST.get('descricao')
+            item.valor = request.POST.get('valor')
+
+            if 'foto' in request.FILES:
+                item.foto = request.FILES['foto']
+
+            item.save()
             return HttpResponseRedirect(reverse('alterar'))
     else:
-        return HttpResponse('Faça o login para acessar!')   
+        return HttpResponse('Faça o login para acessar!')

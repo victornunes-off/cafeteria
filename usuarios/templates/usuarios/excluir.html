@@ -1,17 +1,18 @@
 {% extends 'usuarios/base.html' %}
+{% load static %}
 
-{% block aba %} Excluir Notas {% endblock %}
+{% block aba %}Excluir Item{% endblock %}
 
-{% block titulo %} Excluir Notas {% endblock %}
+{% block titulo %}Excluir Item do Cardápio{% endblock %}
 
 {% block conteudo %}
-
-<h3>Exclusão da Nota Selecionada</h3>
+<h3>Deseja realmente excluir o item abaixo?</h3>
 <hr>
-<p>Tem certeza que deseja excluir as notas da disciplina <strong>{{ lista_notas.disciplina }}</strong>?</p>
-<div class="delete">
-    <a href="{% url 'excluir' lista_notas.pk %}" class="btn btn-success btn-sm">Sim</a>
-    <a href="{% url 'alterar' %}" class="btn btn-danger btn-sm">Não</a>
+<p><strong>{{ item.titulo }}</strong></p>
+<p>{{ item.descricao }}</p>
+<img src="{{ item.foto.url }}" width="100">
+<div class="mt-3">
+    <a href="{% url 'excluir' item.pk %}" class="btn btn-success">Sim</a>
+    <a href="{% url 'alterar' %}" class="btn btn-danger">Não</a>
 </div>
-
 {% endblock %}

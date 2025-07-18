@@ -1,41 +1,32 @@
 {% extends 'usuarios/base.html' %}
+{% load static %}
 
-{% block aba %}Editar Notas{% endblock %}
+{% block aba %}Editar Item{% endblock %}
 
-{% block titulo %}Editar Notas{% endblock %}
+{% block titulo %}Editar Item do Cardápio{% endblock %}
 
 {% block conteudo %}
-
-<h3>Edição da Nota Selecionada</h3>
-<p class="lead"> Verifique as informações cadastradas e faça as devidas edições.</p>
+<h3>Edição do item selecionado</h3>
 <hr>
-<form action="{% url 'editar' lista_notas.pk %}" method="POST">
+<form action="{% url 'editar' item.pk %}" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    <div class="form-register">
-        <label for="userName">Nome:</label>
-        <label for="Name" style="font-weight:bold;">{{ user.first_name }}</label>
+    <div class="form-group mb-3">
+        <label for="titulo">Título:</label>
+        <input type="text" id="titulo" name="titulo" class="form-control" value="{{ item.titulo }}">
     </div>
-    <div class="form-register">
-        <label for="disciplinaName">Disciplina</label>
-        <input type="text" id="disciplinaName" name="disciplina" value="{{ lista_notas.disciplina }}">
+    <div class="form-group mb-3">
+        <label for="descricao">Descrição:</label>
+        <textarea id="descricao" name="descricao" class="form-control">{{ item.descricao }}</textarea>
     </div>
-    <div class="form-register">
-        <label for="notaAtividade">Nota das Atividade: </label>
-        <input type="text" id="notaAtividade" name="nota_atividade" value="{{ lista_notas.nota_atividade }}">
+    <div class="form-group mb-3">
+        <label for="valor">Valor:</label>
+        <input type="number" id="valor" name="valor" class="form-control" step="0.01" value="{{ item.valor }}">
     </div>
-    <div class="form-register">
-        <label for="notaTrabalho">Nota do Trabalho: </label>
-        <input type="text" id="notaTrabalho" name="nota_trabalho" value="{{ lista_notas.nota_trabalho }}">
+    <div class="form-group mb-3">
+        <label for="foto">Atualizar Foto:</label>
+        <input type="file" id="foto" name="foto" class="form-control">
     </div>
-    <div class="form-register">
-        <label for="notaProva">Nota da Prova: </label>
-        <input type="text" id="notaProva" name="nota_prova" value="{{ lista_notas.nota_prova }}">
-    </div>
-    <div class="update">
-        <button type="submit" class="btn btn-success btn-sm">Atualizar</button>
-        <a href="{% url 'alterar' %}" class="btn btn-danger btn-sm">Voltar</a>
-    </div>
-    
+    <button type="submit" class="btn btn-success">Salvar</button>
+    <a href="{% url 'alterar' %}" class="btn btn-danger">Cancelar</a>
 </form>
-
 {% endblock %}
