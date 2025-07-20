@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path("login/", views.login, name="login"),
@@ -13,4 +15,9 @@ urlpatterns = [
     path("excluir/<int:pk>/", views.excluir, name="excluir"),
     path("editar_verificacao/<int:pk>/", views.editar_verificacao, name="editar_verificacao"),
     path("editar/<int:pk>/", views.editar, name="editar"),
+    path("editar/", views.editar_sem_id, name="editar_sem_id"),
+    path("sobre/", views.sobre, name="sobre"),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

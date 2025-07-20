@@ -1,0 +1,41 @@
+{% extends 'usuarios/base.html' %}
+{% load static %}
+
+{% block aba %}Sobre a Cafeteria{% endblock %}
+
+{% block titulo %}Conheça a Nossa Cafeteria{% endblock %}
+
+{% block conteudo %}
+<div class="row align-items-center">
+    <div class="col-md-5 mb-5">
+        <img src="{% static 'img/sobre-cafeteria.jpg' %}" alt="Interior da Cafeteria" class="img-fluid rounded shadow">
+    </div>
+    <div class="col-md-6">
+        <h3 class="mb-3">Nossa História</h3>
+        <p>Desde 2024, nossa cafeteria nasceu com o propósito de oferecer experiências únicas, combinando sabores intensos com um ambiente aconchegante.</p>
+        <p>Valorizamos ingredientes de qualidade, atendimento caloroso e um cardápio cuidadosamente pensado para encantar todos os paladares.</p>
+        <p>Seja para um café rápido ou uma pausa mais longa, aqui é o seu lugar!</p>
+    </div>
+</div>
+
+<hr class="my-2">
+
+<div class="row text-center">
+    <div class="col-md-4">
+        <i class="bi bi-cup-hot-fill fs-3 text-primary"></i>
+        <h5 class="mt-1">Cafés Especiais</h5>
+        <p>Uma seleção de grãos nobres com torrefação artesanal.</p>
+    </div>
+    <div class="col-md-4">
+        <i class="bi bi-cake2-fill fs-3 text-success"></i>
+        <h5 class="mt-1">Doces Artesanais</h5>
+        <p>Bolos, tortas e sobremesas feitas com amor.</p>
+    </div>
+    <div class="col-md-4">
+        <i class="bi bi-wifi fs-3 text-info"></i>
+        <h5 class="mt-1">Ambiente Aconchegante</h5>
+        <p>Wi-Fi grátis, boa música e muito conforto.</p>
+    </div>
+</div>
+
+{% endblock %}

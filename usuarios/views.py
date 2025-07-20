@@ -2,8 +2,9 @@ from django.shortcuts import render
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as login_django, logout as logout_django
-from .models import ItemCardapio
 from django.urls import reverse
+from .models import ItemCardapio
+from django.shortcuts import render, redirect
 
 def login(request):
     if request.method == 'GET':
@@ -17,14 +18,14 @@ def login(request):
             login_django(request, user)
             return render(request, 'usuarios/home.html')
         else:
-            return HttpResponse('Login ou senha inválidos!')
+            return render(request, 'usuarios/login.html', {'erro': 'Login ou senha inválidos!'})
 
 def logout(request):
     if request.user.is_authenticated:
         logout_django(request)
         return render(request, 'usuarios/login.html')
     else:
-        return HttpResponse('Você não acessou a sua conta ainda!')
+       return render(request, 'usuarios/login.html', {'erro': 'Você ainda não acessou sua conta!'})
 
 def cadastro(request):
     if request.method == 'GET':
@@ -38,7 +39,7 @@ def cadastro(request):
         user = User.objects.filter(username=username).first()
 
         if user is not None:
-            return HttpResponse('Usuário já existe!')
+            return render(request, 'usuarios/cadastro.html', {'erro': 'Usuário já existe.'})
         else:
             user = User.objects.create_user(username=username, email=email, password=password, first_name=first_name)
             user.save()
@@ -78,7 +79,17 @@ def alterar(request):
 
 def visualizar(request):
     if request.user.is_authenticated:
-        lista_itens = ItemCardapio.objects.all()
+        ordenacao = request.GET.get('ordenar', '')
+
+        if ordenacao == 'titulo':
+            lista_itens = ItemCardapio.objects.order_by('titulo')
+        elif ordenacao == 'preco_menor':
+            lista_itens = ItemCardapio.objects.order_by('valor')
+        elif ordenacao == 'preco_maior':
+            lista_itens = ItemCardapio.objects.order_by('-valor')
+        else:
+            lista_itens = ItemCardapio.objects.all()
+
         return render(request, 'usuarios/visualizar.html', {'lista_itens': lista_itens})
     else:
         return render(request, 'usuarios/login.html')
@@ -106,17 +117,27 @@ def editar_verificacao(request, pk):
         return HttpResponse('Faça o login para acessar!')
 
 def editar(request, pk):
+    if not request.user.is_authenticated:
+        return render(request, 'usuarios/login.html', {
+            'erro': 'Você precisa estar logado para acessar essa página.'
+        })
+
     if request.method == 'POST':
-        if request.user.is_authenticated:
-            item = ItemCardapio.objects.get(pk=pk)
-            item.titulo = request.POST.get('titulo')
-            item.descricao = request.POST.get('descricao')
-            item.valor = request.POST.get('valor')
+        item = ItemCardapio.objects.get(pk=pk)
+        item.titulo = request.POST.get('titulo')
+        item.descricao = request.POST.get('descricao')
+        item.valor = request.POST.get('valor')
 
-            if 'foto' in request.FILES:
-                item.foto = request.FILES['foto']
+        if 'foto' in request.FILES:
+            item.foto = request.FILES['foto']
 
-            item.save()
-            return HttpResponseRedirect(reverse('alterar'))
-    else:
-        return HttpResponse('Faça o login para acessar!')
+        item.save()
+        return HttpResponseRedirect(reverse('alterar'))
+
+def editar_sem_id(request):
+    return render(request, 'usuarios/login.html', {
+        'erro': 'Você precisa estar logado para acessar essa página.'
+    })
+
+def sobre(request):
+    return render(request, 'usuarios/sobre.html')
