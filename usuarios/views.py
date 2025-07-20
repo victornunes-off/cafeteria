@@ -20,13 +20,6 @@ def login(request):
         else:
             return render(request, 'usuarios/login.html', {'erro': 'Login ou senha inválidos!'})
 
-def logout(request):
-    if request.user.is_authenticated:
-        logout_django(request)
-        return render(request, 'usuarios/login.html')
-    else:
-       return render(request, 'usuarios/login.html', {'erro': 'Você ainda não acessou sua conta!'})
-
 def cadastro(request):
     if request.method == 'GET':
         return render(request, 'usuarios/cadastro.html')
@@ -77,23 +70,6 @@ def alterar(request):
         else:
             return render(request, 'usuarios/login.html')
 
-def visualizar(request):
-    if request.user.is_authenticated:
-        ordenacao = request.GET.get('ordenar', '')
-
-        if ordenacao == 'titulo':
-            lista_itens = ItemCardapio.objects.order_by('titulo')
-        elif ordenacao == 'preco_menor':
-            lista_itens = ItemCardapio.objects.order_by('valor')
-        elif ordenacao == 'preco_maior':
-            lista_itens = ItemCardapio.objects.order_by('-valor')
-        else:
-            lista_itens = ItemCardapio.objects.all()
-
-        return render(request, 'usuarios/visualizar.html', {'lista_itens': lista_itens})
-    else:
-        return render(request, 'usuarios/login.html')
-
 def excluir_verificacao(request, pk):
     if request.user.is_authenticated:
         item = ItemCardapio.objects.get(pk=pk)
@@ -139,5 +115,29 @@ def editar_sem_id(request):
         'erro': 'Você precisa estar logado para acessar essa página.'
     })
 
+def visualizar(request):
+    if request.user.is_authenticated:
+        ordenacao = request.GET.get('ordenar', '')
+
+        if ordenacao == 'titulo':
+            lista_itens = ItemCardapio.objects.order_by('titulo')
+        elif ordenacao == 'preco_menor':
+            lista_itens = ItemCardapio.objects.order_by('valor')
+        elif ordenacao == 'preco_maior':
+            lista_itens = ItemCardapio.objects.order_by('-valor')
+        else:
+            lista_itens = ItemCardapio.objects.all()
+
+        return render(request, 'usuarios/visualizar.html', {'lista_itens': lista_itens})
+    else:
+        return render(request, 'usuarios/login.html')
+
 def sobre(request):
     return render(request, 'usuarios/sobre.html')
+
+def logout(request):
+    if request.user.is_authenticated:
+        logout_django(request)
+        return render(request, 'usuarios/login.html')
+    else:
+       return render(request, 'usuarios/login.html', {'erro': 'Você ainda não acessou sua conta!'})
