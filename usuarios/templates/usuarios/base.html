@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block aba %}Cafe Maneiro{% endblock %}</title>
-    <link rel="icon" href="{% static 'img/favicon.png' %}" type="image/png">
+    <link rel="icon" href="{% static 'img/icon.png' %}" type="image/png">
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
@@ -29,7 +29,6 @@
             background-color: rgba(255, 255, 255, 0.90); /* branco com 50% de transparência */
             z-index: -1; /* atrás do conteúdo */
         }
-
         .menu-card {
             background-color: #ffffffcc; /* branco com leve transparência */
             transition: all 0.2s ease-in-out;
@@ -42,14 +41,14 @@
 </head>
 <body>
         {% block navbar %}
-        <nav class="navbar navbar-expand-lg" style="background-color: #3a4a58;">
-            <style>
+        <nav class="navbar navbar-expand-lg" style="color: white !important; background-color: #3a4a58;">
+            <!-- <style>
                 .navbar a {
                     color: white !important;
                 }
-            </style>
+            </style> -->
             <div class="container px-5">
-                <a class="navbar-brand text-white" href="{% url 'home' %}" style="font-family: Caveat, sans serif;">Café Maneiro</a>
+                <a class="navbar-brand text-white" href="{% url 'home' %}" style="font-family: Caveat, sans serif; font-size: 35px;">Café Maneiro</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
