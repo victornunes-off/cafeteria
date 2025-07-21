@@ -135,6 +135,9 @@ def visualizar(request):
 def sobre(request):
     return render(request, 'usuarios/sobre.html')
 
+def contato(request):
+    return render(request, 'usuarios/contato.html')
+
 def logout(request):
     if request.user.is_authenticated:
         logout_django(request)
