@@ -58,6 +58,11 @@
                         <li class="nav-item"><a class="nav-link text-white" href="{% url 'home' %}">Página Inicial</a></li>
                         <li class="nav-item"><a class="nav-link text-white" href="{% url 'sobre' %}">Sobre</a></li>
                         <li class="nav-item"><a class="nav-link text-white" href="#">Contato</a></li>
+                        {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <span class="nav-link disabled text-light">Olá, {{ user.email }}</span>
+                        </li>
+                        {% endif %}
                         <li class="nav-item"><a class="nav-link text-white" href="{% url 'logout' %}">Logout</a></li>
                     </ul>
                 </div>
@@ -65,11 +70,10 @@
         </nav>
         {% endblock %}
 
-
         <!-- Page Content-->
         <div class="container px-4 px-lg-5">
             <!-- Call to Action-->
-            <div class="card text-white my-5 py-4 text-center" style="background-color: #3a4a58;">
+            <div class="card my-5 py-* text-center" style="background-color: #3a4a58;">
                 <div class="card-body">
                     <p class="text-white m-0" style="font-size: 20px;">
                         {% block titulo %} Bem-vindo ao administrador de cardápio da Café Maneiro.<br> <br>Bom Café! {% endblock %}
