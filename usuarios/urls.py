@@ -17,6 +17,7 @@ urlpatterns = [
     path("editar/<int:pk>/", views.editar, name="editar"),
     path("editar/", views.editar_sem_id, name="editar_sem_id"),
     path("sobre/", views.sobre, name="sobre"),
+    path("contato/", views.contato, name="contato"),
 ]
 
 if settings.DEBUG:
