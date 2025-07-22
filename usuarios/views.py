@@ -39,13 +39,15 @@ def cadastro(request):
             return render(request, 'usuarios/login.html')
 
 def home(request):
-    if request.user.is_authenticated:
-        return render(request, 'usuarios/home.html')
+    if not request.user.is_authenticated:
+        return render(request, 'usuarios/login.html', {'erro': 'Você precisa estar logado para acessar essa página.'})
     else:
-        return render(request, 'usuarios/login.html')
+        return render(request, 'usuarios/home.html')
 
 def lancar(request):
-    if request.method == 'GET':
+    if not request.user.is_authenticated:
+        return render(request, 'usuarios/login.html', {'erro': 'Você precisa estar logado para acessar essa página.'})
+    elif request.method == 'GET':
         if request.user.is_authenticated:
             return render(request, 'usuarios/lancar.html')
         else:
@@ -63,34 +65,35 @@ def lancar(request):
             return render(request, 'usuarios/login.html')
 
 def alterar(request):
-    if request.method == 'GET':
+    if not request.user.is_authenticated:
+        return render(request, 'usuarios/login.html', {'erro': 'Você precisa estar logado para acessar essa página.'})
+    elif request.method == 'GET':
         if request.user.is_authenticated:
             lista_itens = ItemCardapio.objects.all()
             return render(request, 'usuarios/alterar.html', {'lista_itens': lista_itens})
-        else:
-            return render(request, 'usuarios/login.html')
+
 
 def excluir_verificacao(request, pk):
-    if request.user.is_authenticated:
+    if not request.user.is_authenticated:
+        return render(request, 'usuarios/login.html', {'erro': 'Você precisa estar logado para acessar essa página.'})
+    elif request.user.is_authenticated:
         item = ItemCardapio.objects.get(pk=pk)
         return render(request, 'usuarios/excluir.html', {'item': item})
-    else:
-        return HttpResponse('Faça o login para acessar!')
 
 def excluir(request, pk):
-    if request.user.is_authenticated:
+    if not request.user.is_authenticated:
+        return render(request, 'usuarios/login.html', {'erro': 'Você precisa estar logado para acessar essa página.'})
+    elif request.user.is_authenticated:
         item = ItemCardapio.objects.get(pk=pk)
         item.delete()
         return HttpResponseRedirect(reverse('alterar'))
-    else:
-        return render(request, 'usuarios/login.html')
 
 def editar_verificacao(request, pk):
-    if request.user.is_authenticated:
+    if not request.user.is_authenticated:
+        return render(request, 'usuarios/login.html', {'erro': 'Você precisa estar logado para acessar essa página.'})
+    elif request.user.is_authenticated:
         item = ItemCardapio.objects.get(pk=pk)
         return render(request, 'usuarios/editar.html', {'item': item})
-    else:
-        return HttpResponse('Faça o login para acessar!')
 
 def editar(request, pk):
     if not request.user.is_authenticated:
@@ -98,7 +101,7 @@ def editar(request, pk):
             'erro': 'Você precisa estar logado para acessar essa página.'
         })
 
-    if request.method == 'POST':
+    elif request.method == 'POST':
         item = ItemCardapio.objects.get(pk=pk)
         item.titulo = request.POST.get('titulo')
         item.descricao = request.POST.get('descricao')
@@ -116,7 +119,9 @@ def editar_sem_id(request):
     })
 
 def visualizar(request):
-    if request.user.is_authenticated:
+    if not request.user.is_authenticated:
+        return render(request, 'usuarios/login.html', {'erro': 'Você precisa estar logado para acessar essa página.'})
+    elif request.user.is_authenticated:
         ordenacao = request.GET.get('ordenar', '')
 
         if ordenacao == 'titulo':
@@ -129,14 +134,18 @@ def visualizar(request):
             lista_itens = ItemCardapio.objects.all()
 
         return render(request, 'usuarios/visualizar.html', {'lista_itens': lista_itens})
-    else:
-        return render(request, 'usuarios/login.html')
 
 def sobre(request):
-    return render(request, 'usuarios/sobre.html')
+    if not request.user.is_authenticated:
+        return render(request, 'usuarios/login.html', {'erro': 'Você precisa estar logado para acessar essa página.'})
+    else:
+        return render(request, 'usuarios/sobre.html')
 
 def contato(request):
-    return render(request, 'usuarios/contato.html')
+    if not request.user.is_authenticated:
+        return render(request, 'usuarios/login.html', {'erro': 'Você precisa estar logado para acessar essa página.'})
+    else:
+        return render(request, 'usuarios/contato.html')
 
 def logout(request):
     if request.user.is_authenticated:

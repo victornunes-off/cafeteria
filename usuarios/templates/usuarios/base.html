@@ -60,10 +60,10 @@
                             <span class="nav-link disabled text-light">Olá, {{ user.email }}</span>
                         </li>
                         {% endif %}
-                        <li class="nav-item"><a class="nav-link text-white" href="{% url 'home' %}">Página Inicial</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="{% url 'home' %}">| Página Inicial</a></li>
                         <li class="nav-item"><a class="nav-link text-white" href="{% url 'sobre' %}">Sobre</a></li>
                         <li class="nav-item"><a class="nav-link text-white" href="{% url 'contato' %}">Contato</a></li>
-                        <li class="nav-item"><a class="nav-link text-white" href="{% url 'logout' %}">Logout</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="{% url 'logout' %}">Sair</a></li>
                     </ul>
                 </div>
             </div>
@@ -103,7 +103,7 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div id="carouselCafe" class="carousel slide mb-5" data-bs-ride="carousel" data-bs-interval="2000">
+                    <div id="carouselCafe" class="carousel slide mb-5" data-bs-ride="carousel" data-bs-interval="7000">
                         <div class="carousel-inner">
                             <div class="carousel-item active">
                                 <img src="{% static 'img/galeria1.jpg' %}" class="d-block w-100 galeria-img" alt="...">
